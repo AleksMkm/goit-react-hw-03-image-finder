@@ -11,13 +11,24 @@ class Searchbar extends Component {
   }
 
   state = {
-    value: '',
+    value: 'corgi',
+  };
+
+  handleInput = e => {
+    this.setState({ value: e.target.value });
+  };
+
+  handleSubmit = e => {
+    e.preventDefault();
+    this.props.getSearchQuery(this.state.value.toLowerCase().trim());
+    this.setState({ value: '' });
+    this.btn.current.blur();
   };
 
   render() {
     return (
       <header className={s.searchbar}>
-        <form className={s.form}>
+        <form className={s.form} onSubmit={this.handleSubmit}>
           <button type="submit" className={s.btn} ref={this.btn}>
             <IconContext.Provider value={{ size: '16px' }}>
               <FiSearch />
@@ -27,9 +38,9 @@ class Searchbar extends Component {
           <input
             className={s.input}
             type="text"
-            autocomplete="off"
-            autofocus
+            value={this.state.value}
             placeholder="Search images and photos"
+            onChange={this.handleInput}
           />
         </form>
       </header>
