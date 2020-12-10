@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-// import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ImageGalleryItem from './ImageGalleryItem';
 import s from './ImageGallery.module.css';
@@ -32,38 +31,60 @@ class ImageGallery extends Component {
     const nextPage = this.props.page;
 
     if (prevQuery !== nextQuery) {
-      this.setState({ status: Status.PENDING });
+      this.renderNewSearchQuery(nextQuery, nextPage);
+    }
 
-      imageAPI.fetchImages(nextQuery, nextPage).then(images => {
+    if (prevPage !== nextPage && prevPage < nextPage) {
+      this.renderMorePages(nextQuery, nextPage);
+    }
+  }
+
+  updateImageAvialability = () => {
+    const result =
+      this.state.totalSearchResults > this.state.images.length ? true : false;
+    this.props.updateImageAvialability(result);
+  };
+
+  renderNewSearchQuery = (nextQuery, nextPage) => {
+    this.props.resetSearchPage();
+    this.setState({ images: null, status: Status.PENDING });
+
+    imageAPI
+      .fetchImages(nextQuery, nextPage)
+      .then(images => {
         console.log(images);
         this.setState({
           images: images.hits,
           totalSearchResults: images.totalHits,
           status: Status.RESOLVED,
         });
+      })
+      .finally(data => {
+        this.updateImageAvialability();
       });
-    }
+  };
 
-    if (prevPage !== nextPage) {
-      this.setState({ status: Status.PENDING });
+  renderMorePages = (nextQuery, nextPage) => {
+    this.setState({ status: Status.PENDING });
 
-      imageAPI
-        .fetchImages(nextQuery, nextPage)
-        .then(images => {
-          this.setState({
-            images: [...prevState.images, ...images.hits],
-            status: Status.RESOLVED,
-          });
-        })
-        .finally(data => {
-          const elements = this.gallery.current.children;
-          elements[Math.ceil(elements.length / 12) * 12 - 11].scrollIntoView({
-            behavior: 'smooth',
-            block: 'center',
-          });
+    imageAPI
+      .fetchImages(nextQuery, nextPage)
+      .then(images => {
+        this.setState(prevState => ({
+          images: [...prevState.images, ...images.hits],
+          status: Status.RESOLVED,
+        }));
+      })
+      .finally(data => {
+        const elements = this.gallery.current.children;
+        elements[Math.ceil(elements.length / 12) * 12 - 11].scrollIntoView({
+          behavior: 'smooth',
+          block: 'center',
         });
-    }
-  }
+        this.updateImageAvialability();
+      });
+  };
+
   render() {
     return (
       <ul className={s.gallery} ref={this.gallery}>

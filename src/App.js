@@ -9,7 +9,7 @@ class App extends Component {
   state = {
     searchQuery: '',
     searchPage: 1,
-    loading: false,
+    moreImagesAvailable: false,
   };
 
   getSearchQuery = query => {
@@ -20,14 +20,29 @@ class App extends Component {
     this.setState(prevState => ({ searchPage: prevState.searchPage + 1 }));
   };
 
+  resetSearchPage = () => {
+    this.setState({ searchPage: 1 });
+  };
+
+  updateImageAvialability = status => {
+    this.setState({ moreImagesAvailable: status });
+  };
+
   render() {
-    const { searchQuery, searchPage } = this.state;
+    const { searchQuery, searchPage, moreImagesAvailable } = this.state;
 
     return (
       <Container>
         <Searchbar getSearchQuery={this.getSearchQuery} />
-        <ImageGallery searchQuery={searchQuery} page={searchPage} />
-        <Button updateSearchPage={this.updateSearchPage} />
+        <ImageGallery
+          searchQuery={searchQuery}
+          page={searchPage}
+          resetSearchPage={this.resetSearchPage}
+          updateImageAvialability={this.updateImageAvialability}
+        />
+        {moreImagesAvailable && (
+          <Button updateSearchPage={this.updateSearchPage} />
+        )}
         <ToastContainer autoClose={3000} />
       </Container>
     );
