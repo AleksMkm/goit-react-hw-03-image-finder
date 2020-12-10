@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { FiSearch } from 'react-icons/fi';
 import { IconContext } from 'react-icons';
+import { toast } from 'react-toastify';
 
 import s from './Searchbar.module.css';
 
@@ -11,7 +12,7 @@ class Searchbar extends Component {
   }
 
   state = {
-    value: 'corgi',
+    value: '',
   };
 
   handleInput = e => {
@@ -20,7 +21,13 @@ class Searchbar extends Component {
 
   handleSubmit = e => {
     e.preventDefault();
-    this.props.getSearchQuery(this.state.value.toLowerCase().trim());
+    const query = this.state.value.toLowerCase().trim();
+    if (query === '') {
+      toast.error('Please enter a query');
+      this.btn.current.blur();
+      return;
+    }
+    this.props.getSearchQuery(query);
     this.setState({ value: '' });
     this.btn.current.blur();
   };

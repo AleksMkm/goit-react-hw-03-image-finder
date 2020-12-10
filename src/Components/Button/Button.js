@@ -1,9 +1,9 @@
 import React from 'react';
 import s from './Button.module.css';
 
-function Button({ loadMoreData }) {
+function Button({ updateSearchPage }) {
   return (
-    <button className={s.btn} onClick={loadMoreData}>
+    <button className={s.btn} onClick={updateSearchPage}>
       Load more
     </button>
   );
