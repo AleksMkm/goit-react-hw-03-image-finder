@@ -4,7 +4,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Container from './Components/Container';
 import Searchbar from './Components/Searchbar';
 import Button from './Components/Button';
-import ImageGallery from './Components/ImageGallery';
+import ImageGalleryView from './Components/ImageGalleryView';
 
 class App extends Component {
   state = {
@@ -35,10 +35,11 @@ class App extends Component {
     return (
       <Container>
         <Searchbar getSearchQuery={this.getSearchQuery} />
-        <ImageGallery
+        <ImageGalleryView
           searchQuery={searchQuery}
           page={searchPage}
           resetSearchPage={this.resetSearchPage}
+          resetSearchQuery={this.resetSearchQuery}
           updateImageAvialability={this.updateImageAvialability}
         />
         {moreImagesAvailable && (
