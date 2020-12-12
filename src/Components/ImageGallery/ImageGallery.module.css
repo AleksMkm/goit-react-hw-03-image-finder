@@ -10,3 +10,8 @@
 
   list-style: none;
 }
+
+.image {
+  display: block;
+  width: 100%;
+}

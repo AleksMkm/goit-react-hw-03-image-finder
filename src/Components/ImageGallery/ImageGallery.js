@@ -2,11 +2,13 @@ import React, { Component } from 'react';
 import { toast } from 'react-toastify';
 import { css } from '@emotion/core';
 import HashLoader from 'react-spinners/HashLoader';
+import ProgressiveImage from 'react-progressive-image';
 import ImageGalleryItem from './ImageGalleryItem';
 import s from './ImageGallery.module.css';
 import imageAPI from '../../services/pixabay-api';
 import initialScreenPlaceholder from '../../images/initialScreenPlaceholder.jpg';
 import errorPlaceholder from '../../images/errorPlaceholder.jpg';
+import Modal from '../Modal';
 
 const Status = {
   IDLE: 'idle',
@@ -30,6 +32,9 @@ class ImageGallery extends Component {
     totalSearchResults: null,
     error: null,
     status: Status.IDLE,
+    modalIsOpen: false,
+    imageInModal: '',
+    activeImage: '',
   };
 
   componentDidUpdate(prevProps) {
@@ -104,8 +109,23 @@ class ImageGallery extends Component {
       });
   };
 
+  toggleModal = () => {
+    this.setState(prevState => ({
+      modalIsOpen: !prevState.modalIsOpen,
+      imageInModal: '',
+    }));
+  };
+
+  showBigImageInModal = e => {
+    this.toggleModal();
+    this.setState(prevState => ({
+      imageInModal: prevState.imageInModal ? '' : e.target.dataset.image,
+      activeImage: prevState.activeImage ? '' : e.target.src,
+    }));
+  };
+
   render() {
-    const { status } = this.state;
+    const { status, modalIsOpen, imageInModal, activeImage } = this.state;
 
     if (status === Status.IDLE) {
       return (
@@ -131,12 +151,34 @@ class ImageGallery extends Component {
 
     if (status === Status.RESOLVED) {
       return (
-        <ul className={s.gallery} ref={this.gallery}>
-          {this.state.images &&
-            this.state.images.map(image => {
-              return <ImageGalleryItem image={image} key={image.id} />;
-            })}
-        </ul>
+        <>
+          <ul className={s.gallery} ref={this.gallery}>
+            {this.state.images &&
+              this.state.images.map(image => {
+                return (
+                  <ImageGalleryItem
+                    image={image}
+                    showBigImageInModal={this.showBigImageInModal}
+                    key={image.id}
+                  />
+                );
+              })}
+          </ul>
+          {modalIsOpen && (
+            <Modal toggleModal={this.toggleModal}>
+              {/* <img src={imageInModal} alt="" className={s.image} /> */}
+              <ProgressiveImage src={imageInModal} placeholder={activeImage}>
+                {(src, loading) => (
+                  <img
+                    style={{ opacity: loading ? 0.5 : 1 }}
+                    src={src}
+                    className={s.image}
+                  />
+                )}
+              </ProgressiveImage>
+            </Modal>
+          )}
+        </>
       );
     }
   }
