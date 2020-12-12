@@ -52,13 +52,14 @@ class ImageGallery extends Component {
       const result =
         this.state.totalSearchResults > this.state.images.length ? true : false;
       this.props.updateImageAvialability(result);
+    } else {
+      this.props.updateImageAvialability(false);
     }
   };
 
   renderNewSearchQuery = (nextQuery, nextPage) => {
     this.props.resetSearchPage();
-    this.props.updateImageAvialability(false);
-    this.setState({ status: Status.PENDING });
+    this.setState({ images: null, status: Status.PENDING });
 
     imageAPI
       .fetchImages(nextQuery, nextPage)
@@ -69,6 +70,7 @@ class ImageGallery extends Component {
           this.setState({
             status: Status.REJECTED,
           });
+
           return;
         }
         this.setState({
