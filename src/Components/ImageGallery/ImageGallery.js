@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { toast } from 'react-toastify';
+import { css } from '@emotion/core';
+import HashLoader from 'react-spinners/HashLoader';
 import ImageGalleryItem from './ImageGalleryItem';
 import s from './ImageGallery.module.css';
 import imageAPI from '../../services/pixabay-api';
@@ -12,6 +14,10 @@ const Status = {
   RESOLVED: 'resolved',
   REJECTED: 'rejected',
 };
+
+const override = css`
+  margin-top: 80px;
+`;
 
 class ImageGallery extends Component {
   constructor(props) {
@@ -59,9 +65,9 @@ class ImageGallery extends Component {
       .then(images => {
         console.log(images);
         if (images.totalHits === 0) {
-          toast.error('test toast');
+          toast.error(`No images for ${nextQuery}. Please try another query.`);
           this.setState({
-            status: Status.RESOLVED,
+            status: Status.REJECTED,
           });
           return;
         }
@@ -108,7 +114,9 @@ class ImageGallery extends Component {
     }
 
     if (status === Status.PENDING) {
-      return <div>Imma Spinner!!!</div>;
+      return (
+        <HashLoader css={override} size={250} color={'orange'} loading={true} />
+      );
     }
 
     if (status === Status.REJECTED) {
