@@ -116,6 +116,7 @@ class ImageGalleryView extends Component {
     this.setState(prevState => ({
       modalIsOpen: !prevState.modalIsOpen,
       imageInModal: '',
+      activeImage: '',
     }));
   };
 
