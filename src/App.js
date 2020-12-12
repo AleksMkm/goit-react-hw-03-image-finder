@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Container from './Components/Container';
 import Searchbar from './Components/Searchbar';
 import Button from './Components/Button';

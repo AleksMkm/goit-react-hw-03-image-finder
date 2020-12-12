@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from 'react-toastify';
 import ImageGalleryItem from './ImageGalleryItem';
 import s from './ImageGallery.module.css';
 import imageAPI from '../../services/pixabay-api';
@@ -42,19 +42,29 @@ class ImageGallery extends Component {
   }
 
   updateImageAvialability = () => {
-    const result =
-      this.state.totalSearchResults > this.state.images.length ? true : false;
-    this.props.updateImageAvialability(result);
+    if (this.state.images) {
+      const result =
+        this.state.totalSearchResults > this.state.images.length ? true : false;
+      this.props.updateImageAvialability(result);
+    }
   };
 
   renderNewSearchQuery = (nextQuery, nextPage) => {
     this.props.resetSearchPage();
+    this.props.updateImageAvialability(false);
     this.setState({ status: Status.PENDING });
 
     imageAPI
       .fetchImages(nextQuery, nextPage)
       .then(images => {
         console.log(images);
+        if (images.totalHits === 0) {
+          toast.error('test toast');
+          this.setState({
+            status: Status.RESOLVED,
+          });
+          return;
+        }
         this.setState({
           images: images.hits,
           totalSearchResults: images.totalHits,
