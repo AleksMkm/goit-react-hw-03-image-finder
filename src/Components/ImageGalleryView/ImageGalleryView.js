@@ -3,6 +3,7 @@ import { toast } from 'react-toastify';
 import { css } from '@emotion/core';
 import HashLoader from 'react-spinners/HashLoader';
 import ProgressiveImage from 'react-progressive-image';
+import PropTypes from 'prop-types';
 import s from './ImageGalleryView.module.css';
 import imageAPI from '../../services/pixabay-api';
 import initialScreenPlaceholder from '../../images/initialScreenPlaceholder.jpg';
@@ -194,3 +195,10 @@ class ImageGalleryView extends Component {
 }
 
 export default ImageGalleryView;
+
+ImageGalleryView.propTypes = {
+  searchQuery: PropTypes.string.isRequired,
+  page: PropTypes.number.isRequired,
+  resetSearchPage: PropTypes.func.isRequired,
+  updateImageAvialability: PropTypes.func.isRequired,
+};

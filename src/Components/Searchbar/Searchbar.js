@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { FiSearch } from 'react-icons/fi';
 import { IconContext } from 'react-icons';
 import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
 
 import s from './Searchbar.module.css';
 
@@ -56,3 +57,7 @@ class Searchbar extends Component {
 }
 
 export default Searchbar;
+
+Searchbar.propTypes = {
+  getSearchQuery: PropTypes.func.isRequired,
+};

@@ -1,5 +1,6 @@
 import React from 'react';
 import ProgressiveImage from 'react-progressive-image';
+import PropTypes from 'prop-types';
 import s from './ImageGalleryItem.module.css';
 
 function ImageGalleryItem({ image, showBigImageInModal }) {
@@ -22,3 +23,8 @@ function ImageGalleryItem({ image, showBigImageInModal }) {
 }
 
 export default ImageGalleryItem;
+
+ImageGalleryItem.propTypes = {
+  showBigImageInModal: PropTypes.func.isRequired,
+  image: PropTypes.object.isRequired,
+};

@@ -39,7 +39,6 @@ class App extends Component {
           searchQuery={searchQuery}
           page={searchPage}
           resetSearchPage={this.resetSearchPage}
-          resetSearchQuery={this.resetSearchQuery}
           updateImageAvialability={this.updateImageAvialability}
         />
         {moreImagesAvailable && (

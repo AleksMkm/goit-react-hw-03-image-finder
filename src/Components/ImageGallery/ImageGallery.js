@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import s from './ImageGallery.module.css';
 import ImageGalleryItem from '../ImageGalleryItem';
 
@@ -20,3 +21,8 @@ function ImageGallery({ images, showBigImageInModal }) {
 }
 
 export default ImageGallery;
+
+ImageGallery.propTypes = {
+  showBigImageInModal: PropTypes.func.isRequired,
+  images: PropTypes.arrayOf(PropTypes.object).isRequired,
+};

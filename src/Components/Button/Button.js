@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import s from './Button.module.css';
 
 function Button({ updateSearchPage }) {
@@ -10,3 +11,7 @@ function Button({ updateSearchPage }) {
 }
 
 export default Button;
+
+Button.propTypes = {
+  updateSearchPage: PropTypes.func.isRequired,
+};
